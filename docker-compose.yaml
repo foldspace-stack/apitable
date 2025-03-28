@@ -35,13 +35,15 @@ services:
     environment:
       - TZ=${TIMEZONE}
       - DEFAULT_TIME_ZONE=${TIMEZONE}
+    volumes:
+      - ./backend-server/application/build/libs/application.jar:/app/app.jar
     networks:
       - apitable
     depends_on:
       init-db:
         condition: service_completed_successfully
     healthcheck:
-      test: ["CMD-SHELL", "curl -sS 'http://localhost:8081' || exit 1"]
+      test: [ "CMD-SHELL", "curl -sS 'http://localhost:8081' || exit 1" ]
       interval: 5s
       timeout: 5s
       start_period: 30s
@@ -135,7 +137,7 @@ services:
     networks:
       - apitable
     healthcheck:
-      test: ["CMD-SHELL", "curl -sS 'http://localhost:9000' || exit 1"]
+      test: [ "CMD-SHELL", "curl -sS 'http://localhost:9000' || exit 1" ]
       interval: 5s
       timeout: 5s
       retries: 30
@@ -147,11 +149,11 @@ services:
     restart: always
     command:
       [
-          "redis-server",
-          "--appendonly",
-          "yes",
-          "--requirepass",
-          "${REDIS_PASSWORD}",
+        "redis-server",
+        "--appendonly",
+        "yes",
+        "--requirepass",
+        "${REDIS_PASSWORD}",
       ]
     expose:
       - "6379"
